@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{EE7636A7-FE26-4E58-820E-7AE36CBB8247}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>AViewParticleEngine</RootNamespace>
+    <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
+    <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
+    <AndroidResgenClass>Resource</AndroidResgenClass>
+    <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
+    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
+    <AssemblyName>AViewParticleEngine</AssemblyName>
+    <TargetFrameworkVersion>v4.4.87</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="Mono.Android" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Particle.cs" />
+    <Compile Include="Initializers\AccelerationInitializer.cs" />
+    <Compile Include="Initializers\IParticleInitializer.cs" />
+    <Compile Include="Modifiers\IParticleModifier.cs" />
+    <Compile Include="Modifiers\AccelerationModifier.cs" />
+    <Compile Include="Modifiers\AlphaModifier.cs" />
+    <Compile Include="Modifiers\ScaleModifier.cs" />
+    <Compile Include="Initializers\RotationInitiazer.cs" />
+    <Compile Include="Initializers\RotationSpeedInitializer.cs" />
+    <Compile Include="Initializers\ScaleInitializer.cs" />
+    <Compile Include="Initializers\SpeeddByComponentsInitializer.cs" />
+    <Compile Include="Initializers\SpeeddModuleAndRangeInitializer.cs" />
+    <Compile Include="ParticleField.cs" />
+    <Compile Include="AnimatedParticle.cs" />
+    <Compile Include="ParticleSystem.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Initializers\" />
+    <Folder Include="Modifiers\" />
+  </ItemGroup>
+</Project>
