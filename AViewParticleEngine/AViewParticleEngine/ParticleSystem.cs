@@ -443,22 +443,6 @@ namespace AViewParticleEngine
 				OnUpdate(frameTimeInMs * i + 1);
 			}
 		}
-//
-//		class ParticleTimerTask : TimerTask{
-//			readonly ParticleSystem _system;
-//			public ParticleTimerTask(ParticleSystem pSystem){
-//				_system = pSystem;
-//			}
-//
-//			public override void Run ()
-//			{
-//				_system.OnUpdate(CurrentTime);
-//				_system.CurrentTime += TIMERTASK_INTERVAL;
-//			}
-//		}
-//
-
-
 
 		private void StartAnimator(IInterpolator interpolator, long animnationTime) {
 			mAnimator = ValueAnimator.OfInt(new int[] {0, (int) animnationTime});
