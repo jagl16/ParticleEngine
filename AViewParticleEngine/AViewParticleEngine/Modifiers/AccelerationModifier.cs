@@ -1,6 +1,6 @@
 ﻿using Java.Lang;
 
-namespace AViewParticleEngine
+namespace JG.ParticleEngine.Modifiers
 {
 	public class AccelerationModifier : IParticleModifier
 	{

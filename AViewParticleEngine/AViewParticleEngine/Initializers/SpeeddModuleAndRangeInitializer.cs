@@ -2,7 +2,7 @@
 using Java.Lang;
 
 
-namespace AViewParticleEngine
+namespace JG.ParticleEngine.Initializers
 {
 	public class SpeeddModuleAndRangeInitializer : IParticleInitializer
 	{

@@ -1,5 +1,5 @@
 ﻿
-namespace AViewParticleEngine
+namespace JG.ParticleEngine.Modifiers
 {
 	public interface IParticleModifier
 	{

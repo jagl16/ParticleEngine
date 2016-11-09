@@ -1,6 +1,6 @@
 ﻿using Java.Util;
 
-namespace AViewParticleEngine
+namespace JG.ParticleEngine.Initializers
 {
 	public class ScaleInitializer : IParticleInitializer
 	{

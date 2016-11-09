@@ -1,6 +1,6 @@
 ﻿using Android.Views.Animations;
 
-namespace AViewParticleEngine
+namespace JG.ParticleEngine.Modifiers
 {
 	public class ScaleModifier : IParticleModifier
 	{

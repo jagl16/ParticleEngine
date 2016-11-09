@@ -9,8 +9,11 @@ using Android.Views.Animations;
 using Java.Util;
 using System.Linq;
 using Android.OS;
+using System;
+using JG.ParticleEngine.Modifiers;
 
-namespace AViewParticleEngine
+
+namespace JG.ParticleEngine
 {
 	public class ParticleSystem
 	{
@@ -34,6 +37,9 @@ namespace AViewParticleEngine
 			}
 		}
 
+
+		public Action AnimationStarted;
+
 		private float mParticlesPerMilisecond;
 		private int mActivatedParticles;
 		private long mEmitingTime;
@@ -52,6 +58,10 @@ namespace AViewParticleEngine
 		private int mEmiterYMin;
 		private int mEmiterYMax;
 
+		public bool LoopAnimation {
+			get;
+			set;
+		}
 
 
 		private ParticleSystem(Activity a, int maxParticles, long timeToLive) {
@@ -236,6 +246,47 @@ namespace AViewParticleEngine
 			StartEmiting(particlesPerSecond, emitingTime);
 		}
 
+
+		/// <summary>
+		/// Starts emiting particles from a specific view. If at some point the number goes over the amount of particles availabe on create
+		/// no new particles will be created
+		/// </summary>
+		/// <param name="emiter">View from which center the particles will be emited</param>
+		/// <param name="gravity">Which position among the view the emission takes place.</param>
+		/// <param name="particlesPerSecond">Number of particles per second that will be emited (evenly distributed)</param>
+		public void EmitWithGravity (View emiter, GravityFlags gravity, int particlesPerSecond) {
+			// Setup emiter
+			ConfigureEmiter(emiter, gravity);
+			StartEmiting(particlesPerSecond);
+		}
+
+
+		/**
+	 * 
+	 * 
+	 * @param emiter  
+	 * @param particlesPerSecond 
+	 * @param timeToLive miliseconds the particles will be displayed
+	 * @param emitingTime time the emiter will be emiting particles
+	 */
+		/// <summary>
+		/// Starts emiting particles from a specific view. If at some point the number goes over the amount of particles availabe on create
+		/// no new particles will be created
+		/// </summary>
+		/// <param name="emiter">View from which center the particles will be emited.</param>
+		/// <param name="particlesPerSecond">Particles per second.</param>
+		/// <param name="emitingTime">Emiting time.</param>
+		public void Emit (View emiter, int particlesPerSecond, int emitingTime) {
+			EmitWithGravity(emiter, GravityFlags.Center, particlesPerSecond, emitingTime);
+		}
+			
+		public void Emit (View emiter, int particlesPerSecond) {
+			// Setup emiter
+			EmitWithGravity(emiter, GravityFlags.Center, particlesPerSecond);
+		}
+
+
+
 		private void StartEmiting(int particlesPerSecond) {
 			mActivatedParticles = 0;
 			mParticlesPerMilisecond = particlesPerSecond/1000f;
@@ -301,6 +352,8 @@ namespace AViewParticleEngine
 			// Animate from 0 to timeToLiveMax
 			StartAnimator(interpolator, mTimeToLive);
 		}
+
+
 
 
 		private void ConfigureEmiter(int emitterX, int emitterY) {
@@ -453,7 +506,8 @@ namespace AViewParticleEngine
 			});
 
 			mAnimator.AnimationCancel+= (sender, e) => CleanupAnimation ();
-			mAnimator.AnimationEnd+= (sender, e) => CleanupAnimation ();
+			mAnimator.AnimationEnd += (sender, e) => CleanupAnimation ();
+			mAnimator.AnimationStart+=((sender, e) => { AnimationStarted.Invoke(); };
 			mAnimator.SetInterpolator(interpolator);
 			mAnimator.Start();
 		}

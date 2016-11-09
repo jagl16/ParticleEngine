@@ -1,7 +1,7 @@
 ﻿using Java.Util;
 using Java.Lang;
 
-namespace AViewParticleEngine
+namespace JG.ParticleEngine.Initializers
 {
 	public class AccelerationInitializer : IParticleInitializer
 	{

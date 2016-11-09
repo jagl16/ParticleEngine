@@ -1,6 +1,6 @@
 ﻿using Android.Graphics.Drawables;
 
-namespace AViewParticleEngine
+namespace JG.ParticleEngine
 {
 	public class AnimatedParticle : Particle
 	{

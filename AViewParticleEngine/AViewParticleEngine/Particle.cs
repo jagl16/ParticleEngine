@@ -1,7 +1,7 @@
 ﻿using Android.Graphics;
 using System.Collections.Generic;
 
-namespace AViewParticleEngine
+namespace JG.ParticleEngine
 {
 	public class Particle
 	{

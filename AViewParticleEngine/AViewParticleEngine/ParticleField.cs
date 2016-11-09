@@ -3,7 +3,7 @@ using Android.Util;
 using Android.Views;
 using System.Collections.Generic;
 
-namespace AViewParticleEngine
+namespace JG.ParticleEngine
 {
 	public class ParticleField : View
 	{
@@ -34,8 +34,7 @@ namespace AViewParticleEngine
 		protected override void OnDraw (Android.Graphics.Canvas canvas)
 		{
 			base.OnDraw (canvas);
-			Particles.ForEach (p => p.Draw (canvas));
+			Particles?.ForEach (p => p.Draw (canvas));
 		}
 	}
 }
-
