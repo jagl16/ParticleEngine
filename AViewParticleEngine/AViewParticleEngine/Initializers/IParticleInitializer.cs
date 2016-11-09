@@ -1,4 +1,4 @@
-﻿using Java.Util;
+﻿using System;
 
 namespace JG.ParticleEngine.Initializers
 {

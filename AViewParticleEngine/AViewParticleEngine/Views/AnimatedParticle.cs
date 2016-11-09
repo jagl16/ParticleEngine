@@ -1,7 +1,9 @@
 ﻿using Android.Graphics.Drawables;
+using Android.Runtime;
 
-namespace JG.ParticleEngine
+namespace JG.ParticleEngine.Views
 {
+	[Register("jg.particleengine.views.AnimatedParticle")]
 	public class AnimatedParticle : Particle
 	{
 		private readonly AnimationDrawable mAnimationDrawable;

@@ -1,33 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Android.Animation;
 using Android.App;
 using Android.Graphics;
 using Android.Graphics.Drawables;
+using Android.OS;
 using Android.Util;
 using Android.Views;
 using Android.Views.Animations;
-using Java.Util;
-using System.Linq;
-using Android.OS;
-using System;
+using JG.ParticleEngine.Initializers;
 using JG.ParticleEngine.Modifiers;
-
+using JG.ParticleEngine.Views;
 
 namespace JG.ParticleEngine
 {
 	public class ParticleSystem
 	{
 		public static long TIMERTASK_INTERVAL = 50;
-		private ViewGroup mParentView;
-		private int mMaxParticles;
-		private Random mRandom;
+		ViewGroup mParentView;
+		int mMaxParticles;
+		Random mRandom;
 
-		private ParticleField mDrawingView;
+		ParticleField mDrawingView;
 
-		private List<Particle> mParticles;
-		private List<Particle> mActiveParticles;
-		private long mTimeToLive;
-		private long mCurrentTime = 0;
+		List<Particle> mParticles;
+		List<Particle> mActiveParticles;
+		long mTimeToLive;
+		long mCurrentTime = 0;
 		public long CurrentTime {
 			set {
 				mCurrentTime = value;
@@ -40,23 +40,23 @@ namespace JG.ParticleEngine
 
 		public Action AnimationStarted;
 
-		private float mParticlesPerMilisecond;
-		private int mActivatedParticles;
-		private long mEmitingTime;
+		float mParticlesPerMilisecond;
+		int mActivatedParticles;
+		long mEmitingTime;
 
-		private List<IParticleModifier> mModifiers;
-		private List<IParticleInitializer> mInitializers;
-		private ValueAnimator mAnimator;
-		//private Timer mTimer;
-		private Handler mHandler;
+		List<IParticleModifier> mModifiers;
+		List<IParticleInitializer> mInitializers;
+		ValueAnimator mAnimator;
+		Handler mHandler;
 
-		private float mDpToPxScale;
-		private int[] mParentLocation;
+		float mDpToPxScale;
+		int[] mParentLocation;
 
-		private int mEmiterXMin;
-		private int mEmiterXMax;
-		private int mEmiterYMin;
-		private int mEmiterYMax;
+		int mEmiterXMin;
+		int mEmiterXMax;
+		int mEmiterYMin;
+
+		int mEmiterYMax;
 
 		public bool LoopAnimation {
 			get;
@@ -64,7 +64,7 @@ namespace JG.ParticleEngine
 		}
 
 
-		private ParticleSystem(Activity a, int maxParticles, long timeToLive) {
+		ParticleSystem(Activity a, int maxParticles, long timeToLive) {
 			mRandom = new Random();
 			mParentView = (ViewGroup) a.FindViewById(global::Android.Resource.Id.Content);
 
@@ -261,14 +261,6 @@ namespace JG.ParticleEngine
 		}
 
 
-		/**
-	 * 
-	 * 
-	 * @param emiter  
-	 * @param particlesPerSecond 
-	 * @param timeToLive miliseconds the particles will be displayed
-	 * @param emitingTime time the emiter will be emiting particles
-	 */
 		/// <summary>
 		/// Starts emiting particles from a specific view. If at some point the number goes over the amount of particles availabe on create
 		/// no new particles will be created
@@ -353,10 +345,7 @@ namespace JG.ParticleEngine
 			StartAnimator(interpolator, mTimeToLive);
 		}
 
-
-
-
-		private void ConfigureEmiter(int emitterX, int emitterY) {
+		void ConfigureEmiter(int emitterX, int emitterY) {
 			// We configure the emiter based on the window location to fix the offset of action bar if present		
 			mEmiterXMin = emitterX - mParentLocation[0];
 			mEmiterXMax = mEmiterXMin;
@@ -408,11 +397,11 @@ namespace JG.ParticleEngine
 			}
 		}
 
-		private static bool HasGravity(GravityFlags gravity, GravityFlags gravityToCheck) {
+		static bool HasGravity(GravityFlags gravity, GravityFlags gravityToCheck) {
 			return (gravity & gravityToCheck) == gravityToCheck;
 		}
 
-		private void ActivateParticle(long delay) {
+		void ActivateParticle(long delay) {
 			Particle p = mParticles.ElementAt (0);
 			mParticles.RemoveAt(0);
 			p.Init();
@@ -429,11 +418,11 @@ namespace JG.ParticleEngine
 
 
 
-		private int GetFromRange(int minValue, int maxValue) {
+		int GetFromRange(int minValue, int maxValue) {
 			if (minValue == maxValue) {
 				return minValue;
 			}
-			return mRandom.NextInt(maxValue-minValue) + minValue;
+			return mRandom.Next(maxValue-minValue) + minValue;
 		}
 
 		public void OnUpdate(long miliseconds) {
@@ -456,7 +445,7 @@ namespace JG.ParticleEngine
 		}
 
 
-		private void CleanupAnimation() {
+		void CleanupAnimation() {
 			mParentView.RemoveView(mDrawingView);
 			mDrawingView = null;
 			mParentView.PostInvalidate();
@@ -468,10 +457,11 @@ namespace JG.ParticleEngine
 			mEmitingTime = mCurrentTime;
 		}
 
-		/**
-	 * Cancels the particle system and all the animations.
-	 * To stop emitting but animate until the end, use stopEmitting instead.
-	 */
+
+		/// <summary>
+		/// Cancels the particle system and all the animations.
+		/// To stop emitting but animate until the end, use stopEmitting instead.
+		/// </summary>
 		public void Cancel() {
 			if (mAnimator != null && mAnimator.IsRunning) {
 				mAnimator.Cancel();
@@ -482,7 +472,7 @@ namespace JG.ParticleEngine
 			}
 		}
 
-		private void UpdateParticlesBeforeStartTime(int particlesPerSecond) {
+		void UpdateParticlesBeforeStartTime(int particlesPerSecond) {
 			if (particlesPerSecond == 0) {
 				return;
 			}
@@ -497,7 +487,7 @@ namespace JG.ParticleEngine
 			}
 		}
 
-		private void StartAnimator(IInterpolator interpolator, long animnationTime) {
+		void StartAnimator(IInterpolator interpolator, long animnationTime) {
 			mAnimator = ValueAnimator.OfInt(new int[] {0, (int) animnationTime});
 			mAnimator.SetDuration(animnationTime);
 			mAnimator.Update+=((sender, e) => {
@@ -507,7 +497,7 @@ namespace JG.ParticleEngine
 
 			mAnimator.AnimationCancel+= (sender, e) => CleanupAnimation ();
 			mAnimator.AnimationEnd += (sender, e) => CleanupAnimation ();
-			mAnimator.AnimationStart+=((sender, e) => { AnimationStarted.Invoke(); };
+			mAnimator.AnimationStart+=((sender, e) => { AnimationStarted.Invoke(); });
 			mAnimator.SetInterpolator(interpolator);
 			mAnimator.Start();
 		}

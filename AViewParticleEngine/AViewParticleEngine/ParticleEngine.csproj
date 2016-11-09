@@ -55,13 +55,14 @@
     <Compile Include="Initializers\ScaleInitializer.cs" />
     <Compile Include="Initializers\SpeeddByComponentsInitializer.cs" />
     <Compile Include="Initializers\SpeeddModuleAndRangeInitializer.cs" />
-    <Compile Include="ParticleField.cs" />
-    <Compile Include="AnimatedParticle.cs" />
     <Compile Include="ParticleSystem.cs" />
+    <Compile Include="Views\ParticleField.cs" />
+    <Compile Include="Views\AnimatedParticle.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Initializers\" />
     <Folder Include="Modifiers\" />
+    <Folder Include="Views\" />
   </ItemGroup>
 </Project>
