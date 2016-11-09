@@ -1,12 +1,12 @@
-﻿using Java.Util;
-
+﻿
+using System;
 
 namespace JG.ParticleEngine.Initializers
 {
 	public class RotationSpeedInitializer : IParticleInitializer
 	{
-		private readonly float mMinRotationSpeed;
-		private readonly float mMaxRotationSpeed;
+		readonly float mMinRotationSpeed;
+		readonly float mMaxRotationSpeed;
 
 		public RotationSpeedInitializer(float minRotationSpeed,	float maxRotationSpeed) {
 			mMinRotationSpeed = minRotationSpeed;
@@ -17,8 +17,7 @@ namespace JG.ParticleEngine.Initializers
 
 		void IParticleInitializer.InitParticle (Particle p, Random r)
 		{
-			float rotationSpeed = r.NextFloat()*(mMaxRotationSpeed-mMinRotationSpeed) + mMinRotationSpeed;
-			p.RotationSpeed = rotationSpeed;
+			p.RotationSpeed = (float)(r.NextDouble () * (mMaxRotationSpeed - mMinRotationSpeed) + mMinRotationSpeed);
 		}
 
 		#endregion

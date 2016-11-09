@@ -1,14 +1,13 @@
-﻿using Java.Util;
-
+﻿using System;
 
 namespace JG.ParticleEngine.Initializers
 {
 	public class SpeeddByComponentsInitializer : IParticleInitializer
 	{
-		private readonly float mMinSpeedX;
-		private readonly float mMaxSpeedX;
-		private readonly float mMinSpeedY;
-		private readonly float mMaxSpeedY;
+		readonly float mMinSpeedX;
+		readonly float mMaxSpeedX;
+		readonly float mMinSpeedY;
+		readonly float mMaxSpeedY;
 
 		public SpeeddByComponentsInitializer(float speedMinX, float speedMaxX, float speedMinY, float speedMaxY) {
 			mMinSpeedX = speedMinX;
@@ -17,15 +16,10 @@ namespace JG.ParticleEngine.Initializers
 			mMaxSpeedY = speedMaxY;
 		}
 
-		#region IParticleInitializer implementation
-
 		void IParticleInitializer.InitParticle (Particle p, Random r)
 		{
-			p.SpeedX =  r.NextFloat()*(mMaxSpeedX-mMinSpeedX)+mMinSpeedX;
-			p.SpeedY = r.NextFloat()*(mMaxSpeedY-mMinSpeedY)+mMinSpeedY;
+			p.SpeedX = (float)(r.NextDouble () * (mMaxSpeedX - mMinSpeedX) + mMinSpeedX);
+			p.SpeedY = (float)(r.NextDouble () * (mMaxSpeedY - mMinSpeedY) + mMinSpeedY);
 		}
-
-		#endregion
 	}
 }
-

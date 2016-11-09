@@ -1,17 +1,18 @@
-﻿using Java.Util;
-using Java.Lang;
-
+﻿using System;
 
 namespace JG.ParticleEngine.Initializers
 {
-	public class SpeeddModuleAndRangeInitializer : IParticleInitializer
+	/// <summary>
+	/// Particle modifier for angles and peed 
+	/// </summary>
+	public class SpeedModuleAndRangeInitializer : IParticleInitializer
 	{
-		private float mSpeedMin;
-		private float mSpeedMax;
-		private int mMinAngle;
-		private int mMaxAngle;
+		readonly float mSpeedMin;
+		readonly float mSpeedMax;
+		readonly int mMinAngle;
+		readonly int mMaxAngle;
 
-		public SpeeddModuleAndRangeInitializer(float speedMin, float speedMax, int minAngle, int maxAngle) {
+		public SpeedModuleAndRangeInitializer(float speedMin, float speedMax, int minAngle, int maxAngle) {
 			mSpeedMin = speedMin;
 			mSpeedMax = speedMax;
 			mMinAngle = minAngle;
@@ -35,15 +36,15 @@ namespace JG.ParticleEngine.Initializers
 
 		void IParticleInitializer.InitParticle (Particle p, Random r)
 		{
-			float speed =  r.NextFloat()*(mSpeedMax-mSpeedMin) + mSpeedMin;
+			var speed = r.NextDouble()*(mSpeedMax-mSpeedMin) + mSpeedMin;
 			int angle;
 			if (mMaxAngle == mMinAngle) {
 				angle = mMinAngle;
 			}
 			else {
-				angle = r.NextInt(mMaxAngle - mMinAngle) + mMinAngle;
+				angle = r.Next(mMaxAngle - mMinAngle) + mMinAngle;
 			}
-			float angleInRads = (float) (angle*Math.Pi/180f);
+			var angleInRads = angle*Math.PI/180f;
 			p.SpeedX = (float) (speed * Math.Cos(angleInRads));
 			p.SpeedY = (float) (speed * Math.Sin(angleInRads));
 		}

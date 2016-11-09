@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Android.Animation;
-using Android.App;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
+using Android.Support.V4.Content;
 using Android.Util;
 using Android.Views;
 using Android.Views.Animations;
@@ -18,7 +18,7 @@ namespace JG.ParticleEngine
 	public class ParticleSystem
 	{
 		public static long TIMERTASK_INTERVAL = 50;
-		ViewGroup mParentView;
+		ViewGroup mRootView;
 		int mMaxParticles;
 		Random mRandom;
 
@@ -58,15 +58,11 @@ namespace JG.ParticleEngine
 
 		int mEmiterYMax;
 
-		public bool LoopAnimation {
-			get;
-			set;
-		}
+		public bool LoopAnimation {get;set;}
 
-
-		ParticleSystem(Activity a, int maxParticles, long timeToLive) {
+		ParticleSystem(ViewGroup view, int maxParticles, long timeToLive) {
 			mRandom = new Random();
-			mParentView = (ViewGroup) a.FindViewById(global::Android.Resource.Id.Content);
+			mRootView = view;
 
 			mModifiers = new List<IParticleModifier>();
 			mInitializers = new List<IParticleInitializer>();
@@ -78,19 +74,18 @@ namespace JG.ParticleEngine
 			mTimeToLive = timeToLive;
 
 			mParentLocation = new int[2];		
-			mParentView.GetLocationInWindow(mParentLocation);
+			mRootView.GetLocationInWindow(mParentLocation);
 		}
 			
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AViewParticleEngine.ParticleSystem"/> class.
+		/// Initializes a new instance of the <see cref="ParticleSystem"/> class.
 		/// </summary>
-		/// <param name="a">The parent activity.</param>
+		/// <param name="rootView">The parent activity.</param>
 		/// <param name="maxParticles">Max particles.</param>
 		/// <param name="drawableRedId">The drawable resource to use as particle (supports Bitmaps and Animations)</param>
 		/// <param name="timeToLive">Time to live.</param>
-		public ParticleSystem(Activity a, int maxParticles, int drawableRedId, long timeToLive) : this(a, maxParticles, a.Resources.GetDrawable(drawableRedId), timeToLive) {
+		public ParticleSystem(ViewGroup rootView, int maxParticles, int drawableRedId, long timeToLive) : this(rootView, maxParticles, ContextCompat.GetDrawable(rootView.Context,drawableRedId), timeToLive) {
 		}
-
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AViewParticleEngine.ParticleSystem"/> class with a Drawable.
@@ -99,7 +94,7 @@ namespace JG.ParticleEngine
 		/// <param name="maxParticles">Max particles.</param>
 		/// <param name="drawable">Drawable.</param>
 		/// <param name="timeToLive">Time to live.</param>
-		public ParticleSystem(Activity a, int maxParticles, Drawable drawable, long timeToLive) :this(a, maxParticles, timeToLive) {
+		public ParticleSystem(ViewGroup a, int maxParticles, Drawable drawable, long timeToLive) :this(a, maxParticles, timeToLive) {
 			var bitmapDrawable = drawable as BitmapDrawable;
 			if (bitmapDrawable != null) {
 				Bitmap bitmap = bitmapDrawable.Bitmap;
@@ -116,7 +111,7 @@ namespace JG.ParticleEngine
 				} 
 				// Not supported, no particles are being created
 			}
-			DisplayMetrics displayMetrics = a.Resources.DisplayMetrics;
+			var displayMetrics = a.Resources.DisplayMetrics;
 			mDpToPxScale = (displayMetrics.Xdpi / (int) DisplayMetricsDensity.Default);
 		}
 
@@ -127,7 +122,7 @@ namespace JG.ParticleEngine
 		/// <param name="maxParticles">Max particles.</param>
 		/// <param name="bitmap">Bitmap.</param>
 		/// <param name="timeToLive">Time to live.</param>
-		public ParticleSystem(Activity a, int maxParticles, Bitmap bitmap, long timeToLive) : this(a, maxParticles, timeToLive){		
+		public ParticleSystem(ViewGroup rootView, int maxParticles, Bitmap bitmap, long timeToLive) : this(rootView, maxParticles, timeToLive){		
 			for (int i=0; i<mMaxParticles; i++) {
 				mParticles.Add (new Particle (bitmap));
 			}
@@ -140,7 +135,7 @@ namespace JG.ParticleEngine
 		/// <param name="maxParticles">Max particles.</param>
 		/// <param name="animation">AnimationDrawable to display.</param>
 		/// <param name="timeToLive">Time to live.</param>
-		public ParticleSystem(Activity a, int maxParticles, AnimationDrawable animation, long timeToLive) : this(a, maxParticles, timeToLive){
+		public ParticleSystem(ViewGroup rootView, int maxParticles, AnimationDrawable animation, long timeToLive) : this(rootView, maxParticles, timeToLive){
 			// Create the particles
 			for (int i=0; i<mMaxParticles; i++) {
 				mParticles.Add (new AnimatedParticle (animation));
@@ -157,12 +152,12 @@ namespace JG.ParticleEngine
 		}
 
 		public ParticleSystem SetSpeedRange(float speedMin, float speedMax) { 
-			mInitializers.Add(new SpeeddModuleAndRangeInitializer(DpToPx(speedMin), DpToPx(speedMax), 0, 360));		
+			mInitializers.Add(new SpeedModuleAndRangeInitializer(DpToPx(speedMin), DpToPx(speedMax), 0, 360));		
 			return this;
 		}
 
 		public ParticleSystem SetSpeedModuleAndAngleRange(float speedMin, float speedMax, int minAngle, int maxAngle) {
-			mInitializers.Add(new SpeeddModuleAndRangeInitializer(DpToPx(speedMin), DpToPx(speedMax), minAngle, maxAngle));		
+			mInitializers.Add(new SpeedModuleAndRangeInitializer(DpToPx(speedMin), DpToPx(speedMax), minAngle, maxAngle));		
 			return this;
 		}
 
@@ -204,7 +199,7 @@ namespace JG.ParticleEngine
 		}
 
 		public ParticleSystem SetParentViewGroup(ViewGroup viewGroup) {
-			mParentView = viewGroup;
+			mRootView = viewGroup;
 			return this;
 		}
 
@@ -279,12 +274,12 @@ namespace JG.ParticleEngine
 
 
 
-		private void StartEmiting(int particlesPerSecond) {
+		void StartEmiting(int particlesPerSecond) {
 			mActivatedParticles = 0;
 			mParticlesPerMilisecond = particlesPerSecond/1000f;
 			// Add a full size view to the parent view		
-			mDrawingView = new ParticleField(mParentView.Context);
-			mParentView.AddView(mDrawingView);
+			mDrawingView = new ParticleField(mRootView.Context);
+			mRootView.AddView(mDrawingView);
 			mEmitingTime = -1; // Meaning infinite
 			mDrawingView.Particles = mActiveParticles;
 			UpdateParticlesBeforeStartTime(particlesPerSecond);
@@ -305,8 +300,8 @@ namespace JG.ParticleEngine
 			mActivatedParticles = 0;
 			mParticlesPerMilisecond = particlesPerSecond/1000f;
 			// Add a full size view to the parent view		
-			mDrawingView = new ParticleField(mParentView.Context);
-			mParentView.AddView(mDrawingView);
+			mDrawingView = new ParticleField(mRootView.Context);
+			mRootView.AddView(mDrawingView);
 
 			mDrawingView.Particles =  mActiveParticles;
 			UpdateParticlesBeforeStartTime(particlesPerSecond);
@@ -337,8 +332,8 @@ namespace JG.ParticleEngine
 				ActivateParticle(0);
 			}
 			// Add a full size view to the parent view		
-			mDrawingView = new ParticleField(mParentView.Context);
-			mParentView.AddView(mDrawingView);
+			mDrawingView = new ParticleField(mRootView.Context);
+			mRootView.AddView(mDrawingView);
 			mDrawingView.Particles = mActiveParticles;
 			// We start a property animator that will call us to do the update
 			// Animate from 0 to timeToLiveMax
@@ -406,7 +401,7 @@ namespace JG.ParticleEngine
 			mParticles.RemoveAt(0);
 			p.Init();
 			// Initialization goes before configuration, scale is required before can be configured properly
-			mInitializers.ForEach(particle => particle.InitParticle(p,mRandom));
+			mInitializers.ForEach(particle => particle.InitParticle (p, mRandom));
 
 			int particleX = GetFromRange (mEmiterXMin, mEmiterXMax);
 			int particleY = GetFromRange (mEmiterYMin, mEmiterYMax);
@@ -446,9 +441,9 @@ namespace JG.ParticleEngine
 
 
 		void CleanupAnimation() {
-			mParentView.RemoveView(mDrawingView);
+			mRootView.RemoveView(mDrawingView);
 			mDrawingView = null;
-			mParentView.PostInvalidate();
+			mRootView.PostInvalidate();
 			mParticles.AddRange(mActiveParticles);
 		}
 

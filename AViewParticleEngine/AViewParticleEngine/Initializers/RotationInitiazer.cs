@@ -1,12 +1,11 @@
-﻿using Java.Util;
-
+﻿using System;
 
 namespace JG.ParticleEngine.Initializers
 {
 	public class RotationInitiazer : IParticleInitializer
 	{
-		private readonly int mMinAngle;
-		private readonly int mMaxAngle;
+		readonly int mMinAngle;
+		readonly int mMaxAngle;
 
 		public RotationInitiazer(int minAngle, int maxAngle) {
 			mMinAngle = minAngle;
@@ -14,8 +13,7 @@ namespace JG.ParticleEngine.Initializers
 		}
 			
 		public void InitParticle(Particle p, Random r) {
-			int value = r.NextInt(mMaxAngle-mMinAngle)+mMinAngle;
-			p.InitialRotation = value;
+			p.InitialRotation = r.Next (mMaxAngle - mMinAngle) + mMinAngle; ;
 		}
 	}
 }

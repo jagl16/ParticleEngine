@@ -31,7 +31,7 @@ namespace JG.ParticleEngine.Views
 		/// List of current particles the view emits.
 		/// </summary>
 		/// <value>The particles.</value>
-		public List<Particle> Particles { get; private set; } = new List<Particle> ();
+		public List<Particle> Particles { get; set; }
 			
 		protected override void OnDraw (Android.Graphics.Canvas canvas)
 		{

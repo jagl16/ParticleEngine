@@ -6,8 +6,8 @@ namespace JG.ParticleEngine.Views
 	[Register("jg.particleengine.views.AnimatedParticle")]
 	public class AnimatedParticle : Particle
 	{
-		private readonly AnimationDrawable mAnimationDrawable;
-		private readonly int mTotalTime;
+		readonly AnimationDrawable mAnimationDrawable;
+		readonly int mTotalTime;
 
 		public AnimatedParticle(AnimationDrawable animationDrawable) {
 			mAnimationDrawable = animationDrawable;
@@ -18,7 +18,6 @@ namespace JG.ParticleEngine.Views
 				mTotalTime += mAnimationDrawable.GetDuration(i);
 			}
 		}
-
 
 		public override bool Update(long miliseconds) {
 			bool active = base.Update(miliseconds);
@@ -44,4 +43,3 @@ namespace JG.ParticleEngine.Views
 
 	}
 }
-
