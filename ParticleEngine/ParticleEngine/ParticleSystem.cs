@@ -5,7 +5,6 @@ using Android.Animation;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
-using Android.Support.V4.Content;
 using Android.Util;
 using Android.Views;
 using Android.Views.Animations;
@@ -84,7 +83,7 @@ namespace JG.ParticleEngine
 		/// <param name="maxParticles">Max particles.</param>
 		/// <param name="drawableRedId">The drawable resource to use as particle (supports Bitmaps and Animations)</param>
 		/// <param name="timeToLive">Time to live.</param>
-		public ParticleSystem(ViewGroup rootView, int maxParticles, int drawableRedId, long timeToLive) : this(rootView, maxParticles, ContextCompat.GetDrawable(rootView.Context,drawableRedId), timeToLive) {
+		public ParticleSystem(ViewGroup rootView, int maxParticles, int drawableRedId, long timeToLive) : this(rootView, maxParticles, rootView.Resources.GetDrawable(drawableRedId), timeToLive) {
 		}
 
 		/// <summary>
