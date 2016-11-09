@@ -16,7 +16,7 @@
 			<dependency id="Xamarin.Android.Support.Fragment" version="24.2.1"/>
 			<dependency id="Xamarin.Android.Support.Media.Compat" version="24.2.1"/>
 			<dependency id="Xamarin.Android.Support.v4" version="24.2.1"/>
-			<dependency id="Xamarin.Android.Support.Compat" version="24.2.1"
+			<dependency id="Xamarin.Android.Support.Compat" version="24.2.1"/>
 		</dependencies>
 	</metadata>
 	<files>
