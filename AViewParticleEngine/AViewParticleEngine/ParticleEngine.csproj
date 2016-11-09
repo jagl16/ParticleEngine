@@ -65,4 +65,9 @@
     <Folder Include="Modifiers\" />
     <Folder Include="Views\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Link>README.md</Link>
+    </None>
+  </ItemGroup>
 </Project>

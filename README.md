@@ -1,24 +1,15 @@
-This library is based on Leonids library for android (java).
-With the added changes that it supports Views a type of particle and
-it's created for use with Xamarin
-
-Leonids library on git: 
-
-
 This library git:
 https://github.com/jagl16/AViewParticleEngine
 
 
-
-AViewParticleEngine
+ParticleEngine
 ==========================
 
-AViewParticleEngine is a particle system library that works with the standard Android UI on Xamarin.
-This library is a Xamarin port of [Leonids Library](https://github.com/plattysoft/Leonids)
+ParticleEngine is a particle system library that works with the standard Android UI on Xamarin.
+This library was based in [Leonids Library](https://github.com/plattysoft/Leonids) , but modified for Xamarin and enchanced a bit.
 
 
 ## Setup
-
 Just put the build package file into the libs folder of your Xamarin project.
 Or add a reference to the project on your Xamarin solution.
 
