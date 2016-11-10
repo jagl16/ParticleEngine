@@ -21,14 +21,14 @@ Precisely because its main use is games, all engines have support for particle s
 
 This means that if you are building an Android app and you want a particle system, you have to include a graphics engine and use OpenGL -which is quite an overkill- or you have to implement it yourself.
 
-Leonids is made to fill this gap, bringing particle sytems to developers that use the standard Android UI.
+This library is made to fill this gap, bringing particle sytems to developers that use the standard Android UI in Xamarin.
 
 ## Basic usage
 
 Creating and firing a one-shot particle system is very easy, just 3 lines of code.
 
 ```C#
-new ParticleSystem(this, numParticles, drawableResId, timeToLive)
+new ParticleSystem(rootView, numParticles, drawableResId, timeToLive)
 .SetSpeedRange(0.2f, 0.5f)
 .OneShot(anchorView, numParticles);
 ```
